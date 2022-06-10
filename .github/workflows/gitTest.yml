@@ -1,4 +1,4 @@
-name: {Model} Test
+name: Git Test
 
 on: 
   repository_dispatch:

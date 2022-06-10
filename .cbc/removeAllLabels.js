@@ -4,7 +4,7 @@ const deleteAllLabels = async (authToken, issueNumber) => {
     const octokit = new Octokit({ auth: authToken });
     const response = await octokit.request("DELETE /repos/{owner}/{repo}/issues/{issue_number}/labels", {
         owner: "BYUComputingBootCampTests",
-        repo: "{model}Test",
+        repo: "gitTest",
         issue_number: issueNumber
     });
 }
