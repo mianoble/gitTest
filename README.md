@@ -3,7 +3,7 @@
 # BYU Computing Bootcamp - Git Tests
 
 So you believe that you've mastered Git, do you? Well, it's time to prove it! Upon completion of this test, you will receive
-the "Git Knowledge Badge" from the BYU Computing Bootcamp to attest of your knowledge and expertise. Here's a link to the badge on Badgr so that you can go admire it: [Click here!](https://badgr.com/public/badges/VfiBaNJFSdCiSti946bVCA) Change this link to point to the correct place!
+the "Git Knowledge Badge" from the BYU Computing Bootcamp to attest of your knowledge and expertise. Here's a link to the badge on Badgr so that you can go admire it: [Click here!](https://badgr.com/public/badges/VfiBaNJFSdCiSti946bVCA)
 
 <img src="https://api.badgr.io/public/badges/VfiBaNJFSdCiSti946bVCA/image?imageVersion=1" alt="Git Badge" width="200"/>
 
