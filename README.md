@@ -24,20 +24,20 @@ Start out by entering your email into the 'email.txt' file, so that we can prope
 
 To practice Git techniques, you are going to use git commands to set up a repository, and then copy those commands into a text file in the order you ran them. This will be divided into two parts:
 
-A. Within the repo1 folder, run git commands to do the following:
-    1. Initialize a new git repository
-    2. Rename the master branch as main
-    3. Commit helloworld.py onto your main branch
-    4. Make a branch named "branch1"
-    5. Commit a git_check.py onto branch1
-    6. Merge branch1 into your main branch
-    Then save the commands you ran to the gitScript1.sh file.
-B. Within the repo2 folder, run git commands to do the following:
-    1. Clone the git repository located at [this Github repository](https://github.com/BYUComputingBootCampTests/git-clone)
-    2. Print out the commit log
-    3. Check differences between commit e4c1d and previous commit b1cab
-    4. Restore the previous version of door.py from b1cab
-    Then save the commands you ran to the gitScript2.sh file.
+A. Within the repo1 folder, run git commands to do the following:  
+    1. Initialize a new git repository  
+    1. Rename the master branch as main  
+    1. Commit helloworld.py onto your main branch  
+    1. Make a branch named "branch1"  
+    1. Commit a git_check.py onto branch1  
+    1. Merge branch1 into your main branch  
+    Then save the commands you ran to the gitScript1.sh file.  
+B. Within the repo2 folder, run git commands to do the following:  
+    1. Clone the git repository located at [this Github repository](https://github.com/BYUComputingBootCampTests/git-clone)  
+    1. Print out the commit log  
+    1. Check differences between commit e4c1d and previous commit b1cab  
+    1. Restore the previous version of door.py from b1cab  
+    Then save the commands you ran to the gitScript2.sh file.  
 
 ## Submitting
 
