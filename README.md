@@ -25,7 +25,6 @@ Start out by entering your email into the 'email.txt' file, so that we can prope
 To practice Git techniques, you are going to use git commands to set up a repository, and then copy those commands into a text file in the order you ran them. This will be divided into two parts:
 
 A. Within the repo1 folder, run git commands to do the following:  
-
     1. Initialize a new git repository  
     2. Rename the master branch as main  
     3. Commit helloworld.py onto your main branch  
@@ -36,7 +35,6 @@ A. Within the repo1 folder, run git commands to do the following:
 
 
 B. Within the repo2 folder, run git commands to do the following:  
-
     1. Clone the git repository located at [this Github repository](https://github.com/BYUComputingBootCampTests/git-clone)  
     2. Print out the commit log  
     3. Check differences between commit e4c1d and previous commit b1cab  
