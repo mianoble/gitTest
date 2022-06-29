@@ -98,7 +98,7 @@ jobs:
       id: runScript1
       run: |
         cd repo1
-        bash ../gitScript
+        source ../gitScript
 
     - name: Comment
       run: node .cbc/makeComment.js ${{ secrets.AUTH_TOKEN }} ${{ steps.number.outputs.content }} "First gitScript run"
@@ -288,7 +288,7 @@ jobs:
       id: runScript2
       run: |
         cd repo2
-        bash ../gitScript
+        source ../gitScript
 
     - name: Comment
       run: node .cbc/makeComment.js ${{ secrets.AUTH_TOKEN }} ${{ steps.number.outputs.content }} "Second gitScript run"
