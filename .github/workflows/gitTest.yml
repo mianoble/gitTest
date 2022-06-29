@@ -20,6 +20,11 @@ jobs:
     
     - name: Install xmlhttprequest
       run: npm install xmlhttprequest
+
+    - name: Setup Python environment
+      uses: actions/setup-python@v4
+      with:
+        python-version: '>=3.7'
     
       #Get Repository that isn't currently being checked
     - name: Get a Pull Request's Repo Name that isn't already being checked
@@ -45,6 +50,290 @@ jobs:
 
       #INSERT TESTING CODE HERE!
 
+      #Problem 1 Testing
+
+    - name: Get gitScript for problem 1
+      id: getScript1
+      run: node .cbc/getFile.js ${{ secrets.AUTH_TOKEN }} ${{ steps.repo.outputs.content }} gitScript1.sh > gitScript
+
+    - name: Comment
+      run: node .cbc/makeComment.js ${{ secrets.AUTH_TOKEN }} ${{ steps.number.outputs.content }} "gitScript1.sh found"
+
+    - name: Check for "git init"
+      id: gitInit1
+      run: node .cbc/assertContains.js gitScript "git init" 
+
+    - name: Comment
+      run: node .cbc/makeComment.js ${{ secrets.AUTH_TOKEN }} ${{ steps.number.outputs.content }} "git init found"
+
+    - name: Check for "git add"
+      id: gitAdd1
+      run: node .cbc/assertContains.js gitScript "git add" 
+
+    - name: Comment
+      run: node .cbc/makeComment.js ${{ secrets.AUTH_TOKEN }} ${{ steps.number.outputs.content }} "git add found"
+
+    - name: Check for "git commit"
+      id: gitCommit1
+      run: node .cbc/assertContains.js gitScript "git commit" 
+
+    - name: Comment
+      run: node .cbc/makeComment.js ${{ secrets.AUTH_TOKEN }} ${{ steps.number.outputs.content }} "git commit found"
+
+    - name: Check for "git checkout"
+      id: gitCheckout1
+      run: node .cbc/assertContains.js gitScript "git checkout" 
+
+    - name: Comment
+      run: node .cbc/makeComment.js ${{ secrets.AUTH_TOKEN }} ${{ steps.number.outputs.content }} "git checkout found"
+
+    - name: Check for "git merge"
+      id: gitMerge1
+      run: node .cbc/assertContains.js gitScript "git merge" 
+
+    - name: Comment
+      run: node .cbc/makeComment.js ${{ secrets.AUTH_TOKEN }} ${{ steps.number.outputs.content }} "git merge found"
+
+    - name: Run gitScripts1.sh
+      id: runScript1
+      run: |
+        cd repo1
+        bash ../gitScript
+
+    - name: Comment
+      run: node .cbc/makeComment.js ${{ secrets.AUTH_TOKEN }} ${{ steps.number.outputs.content }} "First gitScript run"
+
+    - name: Get output
+      id: checkRepo1
+      run: |
+        cd repo1
+        python git_check.py > output.txt
+
+    - name: Comment
+      run: node .cbc/makeComment.js ${{ secrets.AUTH_TOKEN }} ${{ steps.number.outputs.content }} "Python run"
+
+    - name: Get output file
+      id: getOutput1
+      uses: juliangruber/read-file-action@v1
+      with:
+        path: repo1/output.txt
+
+    - name: Comment
+      run: node .cbc/makeComment.js ${{ secrets.AUTH_TOKEN }} ${{ steps.number.outputs.content }} "Got Python output"
+
+    - name: Assert Proper Output
+      id: properOutput
+      uses: therussiankid92/gat@v1.5
+      with:
+        assertion: should.equal
+        actual: ${{ steps.getOutput1.outputs.content }}
+        expected: ${{ secrets.GIT_CHECK_OUTPUT }}
+
+    - name: Comment
+      run: node .cbc/makeComment.js ${{ secrets.AUTH_TOKEN }} ${{ steps.number.outputs.content }} "Python output is correct"
+
+    - name: Get branch names
+      id: getBranchNames
+      run: |
+        cd repo1
+        git branch > ../branch.txt
+
+    - name: Comment
+      run: node .cbc/makeComment.js ${{ secrets.AUTH_TOKEN }} ${{ steps.number.outputs.content }} "Got branch names"
+
+    - name: Get branch name text
+      id: getBranch
+      uses: juliangruber/read-file-action@v1
+      with:
+        path: branch.txt
+
+    - name: Check for "main"
+      id: mainBranch
+      run: node .cbc/assertContains.js branch.txt "main"
+
+    - name: Comment
+      run: node .cbc/makeComment.js ${{ secrets.AUTH_TOKEN }} ${{ steps.number.outputs.content }} "main found"
+
+    - name: Check for "branch1"
+      id: branch1Branch
+      run: node .cbc/assertContains.js branch.txt "branch1"
+
+    - name: Comment
+      run: node .cbc/makeComment.js ${{ secrets.AUTH_TOKEN }} ${{ steps.number.outputs.content }} "branch1 found"
+
+    - name: Get commit message
+      id: getCommitMsg
+      uses: juliangruber/read-file-action@v1
+      with:
+        path: repo1/.git/COMMIT_EDITMSG
+
+    - name: Comment
+      run: node .cbc/makeComment.js ${{ secrets.AUTH_TOKEN }} ${{ steps.number.outputs.content }} "Get commit message"
+
+    - name: Check for commit message
+      id: checkCommitMsg
+      run: node .cbc/assertContains.js gitScript ${{ steps.getCommitMsg.outputs.content }}
+
+    - name: Comment
+      run: node .cbc/makeComment.js ${{ secrets.AUTH_TOKEN }} ${{ steps.number.outputs.content }} "Commit message found"
+
+    - name: Get main logs
+      id: mainLog
+      run: node .cbc/getFile.js ${{ secrets.AUTH_TOKEN }} ${{ steps.repo.outputs.content }} repo1/.git/logs/refs/heads/main > mainLog
+
+    - name: Comment
+      run: node .cbc/makeComment.js ${{ secrets.AUTH_TOKEN }} ${{ steps.number.outputs.content }} "Got main logs"
+
+    - name: Get branch1 logs
+      id: branch1Log
+      run: node .cbc/getFile.js ${{ secrets.AUTH_TOKEN }} ${{ steps.repo.outputs.content }} repo1/.git/logs/refs/heads/branch1 > branch1Log
+
+    - name: Comment
+      run: node .cbc/makeComment.js ${{ secrets.AUTH_TOKEN }} ${{ steps.number.outputs.content }} "Got branch1 logs"
+
+    - name: Check "Created from main"
+      id: branchLogcheck1
+      run: node .cbc/assertContains.js branch1Log "Created from main"
+
+    - name: Comment
+      run: node .cbc/makeComment.js ${{ secrets.AUTH_TOKEN }} ${{ steps.number.outputs.content }} "Created from found"  
+
+    - name: Check "commit" on branch
+      id: branchLogcheck2
+      run: node .cbc/assertContains.js branch1Log "commit"
+
+    - name: Comment
+      run: node .cbc/makeComment.js ${{ secrets.AUTH_TOKEN }} ${{ steps.number.outputs.content }} "commit found on branch"
+
+    - name: Check "commit" on main
+      id: mainLogcheck1
+      run: node .cbc/assertContains.js mainLog "commit"
+
+    - name: Comment
+      run: node .cbc/makeComment.js ${{ secrets.AUTH_TOKEN }} ${{ steps.number.outputs.content }} "commit found on main"
+
+    - name: Check "renamed"
+      id: mainLogcheck2
+      run: node .cbc/assertContains.js mainLog "renamed"
+
+    - name: Comment
+      run: node .cbc/makeComment.js ${{ secrets.AUTH_TOKEN }} ${{ steps.number.outputs.content }} "renamed found on main"
+
+    - name: Check "merge"
+      id: mainLogcheck3
+      run: node .cbc/assertContains.js mainLog "merge"
+
+    - name: Comment
+      run: node .cbc/makeComment.js ${{ secrets.AUTH_TOKEN }} ${{ steps.number.outputs.content }} "merge found on main"
+
+      #Problem 2 Testing
+
+    - name: Get gitScript for problem 2
+      id: getScript2
+      run: node .cbc/getFile.js ${{ secrets.AUTH_TOKEN }} ${{ steps.repo.outputs.content }} gitScript2.sh > gitScript
+
+    - name: Comment
+      run: node .cbc/makeComment.js ${{ secrets.AUTH_TOKEN }} ${{ steps.number.outputs.content }} "gitScript2.sh found"
+
+    - name: Check for "git clone"
+      id: gitClone2
+      run: node .cbc/assertContains.js gitScript "git clone" 
+
+    - name: Comment
+      run: node .cbc/makeComment.js ${{ secrets.AUTH_TOKEN }} ${{ steps.number.outputs.content }} "git clone found"
+
+    - name: Check for "git log"
+      id: gitLog2
+      run: node .cbc/assertContains.js gitScript "git log" 
+
+    - name: Comment
+      run: node .cbc/makeComment.js ${{ secrets.AUTH_TOKEN }} ${{ steps.number.outputs.content }} "git log found"
+
+    - name: Check for "git diff"
+      id: gitDiff2
+      run: node .cbc/assertContains.js gitScript "git diff" 
+
+    - name: Comment
+      run: node .cbc/makeComment.js ${{ secrets.AUTH_TOKEN }} ${{ steps.number.outputs.content }} "git diff found"
+
+    - name: Check for "git checkout"
+      id: gitCheckout2
+      run: node .cbc/assertContains.js gitScript "git checkout" 
+
+    - name: Comment
+      run: node .cbc/makeComment.js ${{ secrets.AUTH_TOKEN }} ${{ steps.number.outputs.content }} "git checkout found"
+
+    - name: Check for "git commit"
+      id: gitCommit2
+      run: node .cbc/assertContains.js gitScript "git commit" 
+
+    - name: Comment
+      run: node .cbc/makeComment.js ${{ secrets.AUTH_TOKEN }} ${{ steps.number.outputs.content }} "git commit found"
+
+    - name: Check for first hash
+      id: gitHash1
+      run: node .cbc/assertContains.js gitScript "e4c1d" 
+
+    - name: Comment
+      run: node .cbc/makeComment.js ${{ secrets.AUTH_TOKEN }} ${{ steps.number.outputs.content }} "First hash found"
+
+    - name: Check for second hash
+      id: gitHash2
+      run: node .cbc/assertContains.js gitScript "b1cab" 
+
+    - name: Comment
+      run: node .cbc/makeComment.js ${{ secrets.AUTH_TOKEN }} ${{ steps.number.outputs.content }} "Second hash found"
+
+    - name: Run gitScripts1.sh
+      id: runScript2
+      run: |
+        cd repo2
+        bash ../gitScript
+
+    - name: Comment
+      run: node .cbc/makeComment.js ${{ secrets.AUTH_TOKEN }} ${{ steps.number.outputs.content }} "Second gitScript run"
+
+    - name: Run main.py
+      id: runMain
+      run: |
+        cd repo2/git-clone
+        echo -e "0\n1\n2\n3\n" > answers
+        python3 main.py < answers > output.txt
+
+    - name: Comment
+      run: node .cbc/makeComment.js ${{ secrets.AUTH_TOKEN }} ${{ steps.number.outputs.content }} "Python run"
+
+    - name: Check for "You guessed it!"
+      id: checkPyOut
+      run: node .cbc/assertContains.js repo2/git-clone/output.txt "You guessed it!" 
+
+    - name: Comment
+      run: node .cbc/makeComment.js ${{ secrets.AUTH_TOKEN }} ${{ steps.number.outputs.content }} "Python output correct"
+
+    - name: Check for commit history
+      id: commitHistory
+      run: |
+        cd repo2/git-clone
+        git log > gitlog.txt
+        node .cbc/assertContains.js gitlog.txt "6 (o"
+
+    - name: Comment
+      run: node .cbc/makeComment.js ${{ secrets.AUTH_TOKEN }} ${{ steps.number.outputs.content }} "Commit history accurate"
+
+    - name: Check for update line
+      id: doorCheck
+      run: node .cbc/assertContains.js repo2/git-clone/door.py "if not self.locked"
+
+    - name: Comment
+      run: node .cbc/makeComment.js ${{ secrets.AUTH_TOKEN }} ${{ steps.number.outputs.content }} "Door.py accurate"
+
+    - name: Check for update line
+      id: keyCheck
+      run: node .cbc/assertContains.js repo2/git-clone/key.py "toothed"
+
+    - name: Comment
+      run: node .cbc/makeComment.js ${{ secrets.AUTH_TOKEN }} ${{ steps.number.outputs.content }} "Key.py accurate"
+
       #Issue Badge  
     - name: Get email.txt
       id: getEmail
@@ -67,6 +356,158 @@ jobs:
       run: node .cbc/makeComment.js ${{ secrets.AUTH_TOKEN }} ${{ steps.number.outputs.content }} "Badge Issued. Congratulations!"
     
       #INSERT FAILURE COMMENTS HERE
+
+      #Problem 1 Failures
+
+    - name: Failure Comment
+      if: always() && steps.getScript1.outcome == 'failure'
+      run: node .cbc/makeComment.js ${{ secrets.AUTH_TOKEN }} ${{ steps.number.outputs.content }} "Error - gitScript1.sh not found"
+
+    - name: Failure Comment
+      if: always() && steps.gitInit1.outcome == 'failure'
+      run: node .cbc/makeComment.js ${{ secrets.AUTH_TOKEN }} ${{ steps.number.outputs.content }} "Error - commands missing from gitScript1"
+
+    - name: Failure Comment
+      if: always() && steps.gitAdd1.outcome == 'failure'
+      run: node .cbc/makeComment.js ${{ secrets.AUTH_TOKEN }} ${{ steps.number.outputs.content }} "Error - commands missing from gitScript1"
+
+    - name: Failure Comment
+      if: always() && steps.gitCommit1.outcome == 'failure'
+      run: node .cbc/makeComment.js ${{ secrets.AUTH_TOKEN }} ${{ steps.number.outputs.content }} "Error - commands missing from gitScript1"
+
+    - name: Failure Comment
+      if: always() && steps.gitCheckout1.outcome == 'failure'
+      run: node .cbc/makeComment.js ${{ secrets.AUTH_TOKEN }} ${{ steps.number.outputs.content }} "Error - commands missing from gitScript1"
+
+    - name: Failure Comment
+      if: always() && steps.gitMerge1.outcome == 'failure'
+      run: node .cbc/makeComment.js ${{ secrets.AUTH_TOKEN }} ${{ steps.number.outputs.content }} "Error - commands missing from gitScript1"
+
+    - name: Failure Comment
+      if: always() && steps.runScript1.outcome == 'failure'
+      run: node .cbc/makeComment.js ${{ secrets.AUTH_TOKEN }} ${{ steps.number.outputs.content }} "Error - gitScript1 failed"
+
+    - name: Failure Comment
+      if: always() && steps.checkRepo1.outcome == 'failure'
+      run: node .cbc/makeComment.js ${{ secrets.AUTH_TOKEN }} ${{ steps.number.outputs.content }} "Error - git_check broken"
+
+    - name: Failure Comment
+      if: always() && steps.getOutput1.outcome == 'failure'
+      run: node .cbc/makeComment.js ${{ secrets.AUTH_TOKEN }} ${{ steps.number.outputs.content }} "Error - couldn't read output file"
+
+    - name: Failure Comment
+      if: always() && steps.properOutput.outcome == 'failure'
+      run: node .cbc/makeComment.js ${{ secrets.AUTH_TOKEN }} ${{ steps.number.outputs.content }} "Error - python output incorrect"
+
+    - name: Failure Comment
+      if: always() && steps.getBranchNames.outcome == 'failure'
+      run: node .cbc/makeComment.js ${{ secrets.AUTH_TOKEN }} ${{ steps.number.outputs.content }} "Error - couldn't get branch names"
+
+    - name: Failure Comment
+      if: always() && steps.getBranch.outcome == 'failure'
+      run: node .cbc/makeComment.js ${{ secrets.AUTH_TOKEN }} ${{ steps.number.outputs.content }} "Error - couldn't get branch text"
+
+    - name: Failure Comment
+      if: always() && steps.mainBranch.outcome == 'failure'
+      run: node .cbc/makeComment.js ${{ secrets.AUTH_TOKEN }} ${{ steps.number.outputs.content }} "Error - main branch does not exist"
+
+    - name: Failure Comment
+      if: always() && steps.branch1Branch.outcome == 'failure'
+      run: node .cbc/makeComment.js ${{ secrets.AUTH_TOKEN }} ${{ steps.number.outputs.content }} "Error - branch1 does not exist"
+
+    - name: Failure Comment
+      if: always() && steps.getCommitMsg.outcome == 'failure'
+      run: node .cbc/makeComment.js ${{ secrets.AUTH_TOKEN }} ${{ steps.number.outputs.content }} "Error - could not get commit message"
+
+    - name: Failure Comment
+      if: always() && steps.checkCommitMsg.outcome == 'failure'
+      run: node .cbc/makeComment.js ${{ secrets.AUTH_TOKEN }} ${{ steps.number.outputs.content }} "Error - commit message missing"
+
+    - name: Failure Comment
+      if: always() && steps.mainLog.outcome == 'failure'
+      run: node .cbc/makeComment.js ${{ secrets.AUTH_TOKEN }} ${{ steps.number.outputs.content }} "Error - main log not found"
+
+    - name: Failure Comment
+      if: always() && steps.branch1Log.outcome == 'failure'
+      run: node .cbc/makeComment.js ${{ secrets.AUTH_TOKEN }} ${{ steps.number.outputs.content }} "Error - branch1 log not found" 
+
+    - name: Failure Comment
+      if: always() && steps.branchLogcheck1.outcome == 'failure'
+      run: node .cbc/makeComment.js ${{ secrets.AUTH_TOKEN }} ${{ steps.number.outputs.content }} "Error - branch1 missing key features" 
+
+    - name: Failure Comment
+      if: always() && steps.branchLogcheck2.outcome == 'failure'
+      run: node .cbc/makeComment.js ${{ secrets.AUTH_TOKEN }} ${{ steps.number.outputs.content }} "Error - branch1 missing key features" 
+
+    - name: Failure Comment
+      if: always() && steps.mainLogcheck1.outcome == 'failure'
+      run: node .cbc/makeComment.js ${{ secrets.AUTH_TOKEN }} ${{ steps.number.outputs.content }} "Error - main branch missing key features"
+
+    - name: Failure Comment
+      if: always() && steps.mainLogcheck2.outcome == 'failure'
+      run: node .cbc/makeComment.js ${{ secrets.AUTH_TOKEN }} ${{ steps.number.outputs.content }} "Error - main branch missing key features"
+
+    - name: Failure Comment
+      if: always() && steps.mainLogcheck3.outcome == 'failure'
+      run: node .cbc/makeComment.js ${{ secrets.AUTH_TOKEN }} ${{ steps.number.outputs.content }} "Error - main branch missing key features"   
+
+      #Problem 2 Failures
+
+    - name: Failure Comment
+      if: always() && steps.getScript2.outcome == 'failure'
+      run: node .cbc/makeComment.js ${{ secrets.AUTH_TOKEN }} ${{ steps.number.outputs.content }} "Error - gitScript2.sh not found"
+
+    - name: Failure Comment
+      if: always() && steps.gitClone2.outcome == 'failure'
+      run: node .cbc/makeComment.js ${{ secrets.AUTH_TOKEN }} ${{ steps.number.outputs.content }} "Error - commands missing from gitScript2"
+      
+    - name: Failure Comment
+      if: always() && steps.gitLog2.outcome == 'failure'
+      run: node .cbc/makeComment.js ${{ secrets.AUTH_TOKEN }} ${{ steps.number.outputs.content }} "Error - commands missing from gitScript2"
+
+    - name: Failure Comment
+      if: always() && steps.gitDiff2.outcome == 'failure'
+      run: node .cbc/makeComment.js ${{ secrets.AUTH_TOKEN }} ${{ steps.number.outputs.content }} "Error - commands missing from gitScript2"
+
+    - name: Failure Comment
+      if: always() && steps.gitCheckout2.outcome == 'failure'
+      run: node .cbc/makeComment.js ${{ secrets.AUTH_TOKEN }} ${{ steps.number.outputs.content }} "Error - commands missing from gitScript2"
+     
+    - name: Failure Comment
+      if: always() && steps.gitCommit2.outcome == 'failure'
+      run: node .cbc/makeComment.js ${{ secrets.AUTH_TOKEN }} ${{ steps.number.outputs.content }} "Error - commands missing from gitScript2"
+    
+    - name: Failure Comment
+      if: always() && steps.gitHash1.outcome == 'failure'
+      run: node .cbc/makeComment.js ${{ secrets.AUTH_TOKEN }} ${{ steps.number.outputs.content }} "Error - hash names missing from gitScript2"
+
+    - name: Failure Comment
+      if: always() && steps.gitHash2.outcome == 'failure'
+      run: node .cbc/makeComment.js ${{ secrets.AUTH_TOKEN }} ${{ steps.number.outputs.content }} "Error - hash names missing from gitScript2"
+
+    - name: Failure Comment
+      if: always() && steps.runScript2.outcome == 'failure'
+      run: node .cbc/makeComment.js ${{ secrets.AUTH_TOKEN }} ${{ steps.number.outputs.content }} "Error - error with bash script"
+
+    - name: Failure Comment
+      if: always() && steps.runMain.outcome == 'failure'
+      run: node .cbc/makeComment.js ${{ secrets.AUTH_TOKEN }} ${{ steps.number.outputs.content }} "Error - error with python"
+
+    - name: Failure Comment
+      if: always() && steps.checkPyOut.outcome == 'failure'
+      run: node .cbc/makeComment.js ${{ secrets.AUTH_TOKEN }} ${{ steps.number.outputs.content }} "Error - error with python output"
+
+    - name: Failure Comment
+      if: always() && steps.commitHistory.outcome == 'failure'
+      run: node .cbc/makeComment.js ${{ secrets.AUTH_TOKEN }} ${{ steps.number.outputs.content }} "Error - commit history incorrect"
+
+    - name: Failure Comment
+      if: always() && steps.doorCheck.outcome == 'failure'
+      run: node .cbc/makeComment.js ${{ secrets.AUTH_TOKEN }} ${{ steps.number.outputs.content }} "Error - door code incorrect"
+
+    - name: Failure Comment
+      if: always() && steps.keyCheck.outcome == 'failure'
+      run: node .cbc/makeComment.js ${{ secrets.AUTH_TOKEN }} ${{ steps.number.outputs.content }} "Error - key code incorrect"
 
       #Failure Output for Issue Badge
     - name: Failure Comment
