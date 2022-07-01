@@ -184,14 +184,14 @@ jobs:
 
     - name: Get main logs
       id: mainLog
-      run: node .cbc/getFile.js ${{ secrets.AUTH_TOKEN }} ${{ steps.repo.outputs.content }} repo1/.git/logs/refs/heads/main > mainLog
+      run: cat repo1/.git/logs/refs/heads/main > mainLog
 
     - name: Comment
       run: node .cbc/makeComment.js ${{ secrets.AUTH_TOKEN }} ${{ steps.number.outputs.content }} "Got main logs"
 
     - name: Get branch1 logs
       id: branch1Log
-      run: node .cbc/getFile.js ${{ secrets.AUTH_TOKEN }} ${{ steps.repo.outputs.content }} repo1/.git/logs/refs/heads/branch1 > branch1Log
+      run: cat repo1/.git/logs/refs/heads/branch1 > branch1Log
 
     - name: Comment
       run: node .cbc/makeComment.js ${{ secrets.AUTH_TOKEN }} ${{ steps.number.outputs.content }} "Got branch1 logs"
