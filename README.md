@@ -39,7 +39,8 @@ B. Within the repo2 folder, run git commands to do the following:
 1. Clone the git repository located at [this Github repository](https://github.com/BYUComputingBootCampTests/git-clone)  
 2. Print out the commit log  
 3. Check differences between commit e4c1d and previous commit b1cab  
-4. Restore the previous version of door.py from b1cab  
+4. Restore the previous version of door.py from b1cab
+5. Commit the previous version to the repository.  
     
 Then save the commands you ran to the gitScript2.sh file.  
 
