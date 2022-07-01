@@ -320,7 +320,7 @@ jobs:
       run: |
         cd repo2/git-clone
         git log > gitlog.txt
-        node .cbc/assertContains.js gitlog.txt "6 (o"
+        node ../../.cbc/assertContains.js gitlog.txt "6 (o"
 
     - name: Comment
       run: node .cbc/makeComment.js ${{ secrets.AUTH_TOKEN }} ${{ steps.number.outputs.content }} "Commit history accurate"
