@@ -320,6 +320,7 @@ jobs:
       run: |
         cd repo2/git-clone
         git log > gitlog.txt
+        cat gitlog.txt
         node ../../.cbc/assertContains.js gitlog.txt "6 (o"
 
     - name: Comment
