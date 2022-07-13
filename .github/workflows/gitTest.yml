@@ -31,6 +31,12 @@ jobs:
         git config --global user.email "byucomputingbootcamptests@gmail.com"
         git config --global user.name "BYU Computing Bootcamp Tests"
     
+    - name: Setup SSH in case SSH is used
+      uses: MrSquaare/ssh-setup-action@v1
+      with:
+        host: github.com
+        private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
       #Get Repository that isn't currently being checked
     - name: Get a Pull Request's Repo Name that isn't already being checked
       run: node .cbc/getRepoInfo.js ${{ secrets.AUTH_TOKEN }} full_name > repo.txt
